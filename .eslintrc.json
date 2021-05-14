@@ -1,4 +1,4 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "es2021": true
@@ -8,6 +8,10 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:prettier/recommended"
     ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -19,5 +23,7 @@ module.exports = {
         "react", "prettier"
     ],
     "rules": {
+        "no-unused-vars": 0,
+        "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }]
     }
-};
+}
