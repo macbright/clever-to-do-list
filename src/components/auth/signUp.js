@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useContext } from "react";
 import { withRouter, useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { app } from "../../base";
 import { AuthContext } from "../Auth";
 
@@ -34,26 +35,24 @@ const SignUp = () => {
 
   return (
     <div>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSignUp}>
-        <span>{error}</span>
+      <form onSubmit={handleSignUp} className="signup_form">
+        <p>Sign up</p>
         <br />
         <label>
-          Name
           <input name="name" type="text" placeholder="name" />
         </label>
-        <br />
+        <span>{error}</span>
         <label>
-          Email
           <input name="email" type="email" placeholder="Email" />
         </label>
         <br />
+        <span>{error}</span>
         <label>
-          Password
           <input name="password" type="password" placeholder="Password" />
         </label>
         <br />
         <button type="submit">Sign Up</button>
+        <Link to="/login">&larr; Already Signed Up? Sign In</Link>
       </form>
     </div>
   );

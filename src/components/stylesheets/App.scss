@@ -1,0 +1,12 @@
+
+@import "./variables";
+@import "./Login";
+@import "./SignUp";
+
+
+body{
+  background-color: $body_background;
+}
+.main{
+  padding: 20px;
+}
