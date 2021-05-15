@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Login from "./Login";
-import SignUp from "./signUp";
+import Login from "./auth/Login";
+import SignUp from "./auth/signUp";
 import Home from "./Home";
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";

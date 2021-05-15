@@ -1,9 +1,10 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect, useHistory } from "react-router";
-import { app } from "../base.js";
-import { AuthContext } from "./Auth.js";
+import { app } from "../../base.js";
+import { AuthContext } from "../Auth";
 
 const Login = () => {
+  const [error, setError] = useState(null);
   const history = useHistory();
   const handleLogin = useCallback(
     async (event) => {
@@ -13,7 +14,8 @@ const Login = () => {
         await app.signInWithEmailAndPassword(email.value, password.value);
         history.push("/");
       } catch (error) {
-        alert(error);
+        setError("Incorrect email address or password");
+        console.log("Incorrect email address or password", error);
       }
     },
     [history]
@@ -29,6 +31,8 @@ const Login = () => {
     <div>
       <h1>Log in</h1>
       <form onSubmit={handleLogin}>
+        <spa>{error}</spa>
+        <br />
         <label>
           Email
           <input name="email" type="email" placeholder="Email" />
