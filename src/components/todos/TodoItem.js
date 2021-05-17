@@ -11,6 +11,7 @@ const TodoItem = (todo) => {
   const [checked, setChecked] = useState(todo.todo.complete);
   const [modal, setModal] = useState(false);
   const [newText, setNewText] = useState(null);
+  const [todoDate, setTodoDate] = useState(todo.todo.date.toDate());
 
   const { id, text, complete } = todo.todo;
   const onCompleteTodo = (id, complete) =>
@@ -43,6 +44,8 @@ const TodoItem = (todo) => {
         content={text}
         handleClick={onEditTodo}
         upDate={(textNew) => setNewText(textNew)}
+        setDate={(startDate) => setTodoDate(startDate)}
+        date={todoDate}
         buttonType={"Update"}
       />
     </div>

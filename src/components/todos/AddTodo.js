@@ -9,12 +9,14 @@ const AddTodo = () => {
   const todosRef = firestore.collection(`users/${app.currentUser.uid}/todos`);
   const [todo, setTodo] = useState(null);
   const [modal, setModal] = useState(false);
+  const [todoDate, setTodoDate] = useState(new Date());
 
   const handleSubmit = (e) => {
     e.preventDefault();
     todosRef.add({
       text: todo,
       complete: false,
+      date: todoDate,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setTodo("");
@@ -40,6 +42,8 @@ const AddTodo = () => {
         content={todo}
         handleClick={handleSubmit}
         upDate={(textNew) => setTodo(textNew)}
+        setDate={(startDate) => setTodoDate(startDate)}
+        date={todoDate}
         buttonType={"Save"}
       />
     </div>

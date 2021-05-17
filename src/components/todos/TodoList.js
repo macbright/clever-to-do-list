@@ -3,18 +3,24 @@ import firebase, { firestore, functions, app } from "../../base";
 import { AuthContext } from "../Auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import TodoItem from "./TodoItem";
+import { checkDate } from "../utils/checkDate";
+import PropTypes from "prop-types";
 
-const TodoList = () => {
+const TodoList = ({ selectedDate }) => {
   const todosRef = firestore.collection(`users/${app.currentUser.uid}/todos`);
   const [todos] = useCollectionData(todosRef, { idField: "id" });
   const [list, setList] = useState(null);
+  let selectedList = null;
 
   useEffect(() => {
     setList(todos);
   }, [todos]);
 
   const listItems = list?.map((todo) => {
-    //console.log(todo);
+    selectedList = checkDate(selectedDate, list);
+  });
+
+  const SelectedListTodos = selectedList?.map((todo) => {
     return (
       <div key={todo.id}>
         {" "}
@@ -27,9 +33,12 @@ const TodoList = () => {
     <div>
       {console.log(todos)}
       {/* {console.log(todos[0].createdAt.toDate())} */}
-      {list && listItems}
+      {list && SelectedListTodos}
     </div>
   );
 };
 
+TodoList.propTypes = {
+  selectedDate: PropTypes.object,
+};
 export default TodoList;
