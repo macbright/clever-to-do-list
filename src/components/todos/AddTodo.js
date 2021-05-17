@@ -2,14 +2,13 @@ import React, { useContext, useState } from "react";
 import firebase, { firestore, functions, app } from "../../base";
 import { AuthContext } from "../Auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import Modal from "./Modal";
 
 const AddTodo = () => {
   //   const addTodo = functions.httpsCallable("addTodo");
   const todosRef = firestore.collection(`users/${app.currentUser.uid}/todos`);
-  const [todos] = useCollectionData(todosRef, { idField: "id" });
-  const { currentUser } = useContext(AuthContext);
   const [todo, setTodo] = useState(null);
-  const [error, setError] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,8 +17,12 @@ const AddTodo = () => {
       complete: false,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    console.log(todo);
     setTodo("");
+    console.log(todo);
+  };
+
+  const handleEdit = () => {
+    setModal(!modal);
   };
 
   const handleChange = (e) => {
@@ -30,15 +33,15 @@ const AddTodo = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="">
-        <textarea
-          placeholder="write your todo"
-          rows="6"
-          onChange={handleChange}
-        ></textarea>
-        <br />
-        <button type="submit"> Save </button>
-      </form>
+      <button onClick={handleEdit}> AddTodo</button>
+      <Modal
+        displayModal={modal}
+        closeModal={handleEdit}
+        content={todo}
+        handleClick={handleSubmit}
+        upDate={(textNew) => setTodo(textNew)}
+        buttonType={"Save"}
+      />
     </div>
   );
 };
