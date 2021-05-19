@@ -8,18 +8,25 @@ const AddTodo = () => {
   //   const addTodo = functions.httpsCallable("addTodo");
   const todosRef = firestore.collection(`users/${app.currentUser.uid}/todos`);
   const [todo, setTodo] = useState(null);
+  const [error, setError] = useState(null);
   const [modal, setModal] = useState(false);
   const [todoDate, setTodoDate] = useState(new Date());
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    todosRef.add({
-      text: todo,
-      complete: false,
-      date: todoDate,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    setTodo("");
+    if (todo === null || todo === "") {
+      setError("todo can't not be blank");
+    } else {
+      todosRef.add({
+        text: todo,
+        complete: false,
+        date: todoDate,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      setTodo("");
+      setModal(!modal);
+    }
+
     console.log(todo);
   };
 
@@ -34,8 +41,11 @@ const AddTodo = () => {
   };
 
   return (
-    <div>
-      <button onClick={handleEdit}> AddTodo</button>
+    <div className="addTodo">
+      <button className="add_todo" onClick={handleEdit}>
+        {" "}
+        + AddTodo
+      </button>
       <Modal
         displayModal={modal}
         closeModal={handleEdit}
@@ -45,6 +55,7 @@ const AddTodo = () => {
         setDate={(startDate) => setTodoDate(startDate)}
         date={todoDate}
         buttonType={"Save"}
+        error={error}
       />
     </div>
   );

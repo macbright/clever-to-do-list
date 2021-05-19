@@ -1,58 +1,111 @@
-import React, { useContext, useState } from "react";
-import firebase, { firestore, functions, app } from "../../base";
-import { AuthContext } from "../Auth";
+import React, { useContext, useEffect, useState } from "react";
+import { firestore, functions, app } from "../../base";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useParams, Link, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrashAlt,
+  faEdit,
+  faBackward,
+} from "@fortawesome/free-solid-svg-icons";
+import { check } from "prettier";
 
-const TodoItem = (todo) => {
-  //   const addTodo = functions.httpsCallable("addTodo");
+const TodoItem = (props) => {
+  let id2 = useParams();
+  const history = useHistory();
+  const [todo, setTodo] = useState({});
   const todosRef = firestore.collection(`users/${app.currentUser.uid}/todos`);
-  const [checked, setChecked] = useState(todo.todo.complete);
   const [modal, setModal] = useState(false);
-  const [newText, setNewText] = useState(null);
-  const [todoDate, setTodoDate] = useState(todo.todo.date.toDate());
+  const [todoDate, setTodoDate] = useState();
 
-  const { id, text, complete } = todo.todo;
+  useEffect(() => {
+    let docRef = todosRef.doc(id2.id);
+    console.log(todo);
+    docRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          setTodo(doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   setTodoDate(todo.date);
+  //   console.log("checking proper date data:", todo);
+  // }, [todo]);
+
   const onCompleteTodo = (id, complete) =>
     todosRef.doc(id).set({ complete: !complete }, { merge: true });
 
   const onEditTodo = () => {
-    console.log(newText);
-    todosRef.doc(id).set({ text: newText }, { merge: true });
+    console.log("checking date format", todo);
+    todosRef
+      .doc(id2.id)
+      .set({ text: todo.text, date: todo.date }, { merge: true });
+
+    // todosRef.doc(id2.id).set({ date: todo.date }, { merge: true });
+    setModal(!modal);
   };
 
   const handleEdit = () => {
     setModal(!modal);
   };
 
-  const onDeleteTodo = (id) => todosRef.doc(id).delete();
+  const onDeleteTodo = (id) => {
+    todosRef.doc(id).delete();
+    history.push("/");
+  };
 
   return (
-    <div>
-      <p>{todo.todo.text}</p>
-      <input
-        type="checkbox"
-        defaultChecked={checked}
-        onChange={() => onCompleteTodo(id, complete)}
-      />
-      <button onClick={() => onDeleteTodo(id)}>delete</button>
-      <button onClick={handleEdit}> Edit</button>
-      <Modal
-        displayModal={modal}
-        closeModal={handleEdit}
-        content={text}
-        handleClick={onEditTodo}
-        upDate={(textNew) => setNewText(textNew)}
-        setDate={(startDate) => setTodoDate(startDate)}
-        date={todoDate}
-        buttonType={"Update"}
-      />
-    </div>
+    todo && (
+      <div className="todo_page">
+        {console.log("checked: ", todo.text, todo.date)}
+        <h4>
+          {" "}
+          <Link to="/">
+            <FontAwesomeIcon icon={faBackward} />
+          </Link>{" "}
+          Todays Task
+        </h4>
+        <div className="todoContent">
+          <p>{todo.text}</p>
+          <div className="todo_edit">
+            <input
+              type="checkbox"
+              defaultChecked={todo.complete}
+              onChange={() => onCompleteTodo(id2.id, todo.complete)}
+            />
+            <a onClick={() => onDeleteTodo(id2.id)}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </a>
+            <a onClick={handleEdit}>
+              {" "}
+              <FontAwesomeIcon icon={faEdit} />
+            </a>
+          </div>
+        </div>
+        <Modal
+          displayModal={modal}
+          closeModal={handleEdit}
+          content={todo.text}
+          handleClick={onEditTodo}
+          setDate={(startDate) => setTodoDate(startDate)}
+          upDate={(textNew) => setTodo({ text: textNew })}
+          date={todo}
+          buttonType={"Update"}
+        />
+      </div>
+    )
   );
 };
 
-TodoItem.propTypes = {
-  todo: PropTypes.object,
-};
 export default TodoItem;

@@ -3,22 +3,40 @@ import { app } from "../base";
 import { AuthContext } from "./Auth";
 import AddTodo from "./todos/AddTodo";
 import TodoList from "./todos/TodoList";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+// import Calendar from "react-calendar";
+// import "react-calendar/dist/Calendar.css";
+import DatePicker from "react-horizontal-datepicker";
 
 const Home = () => {
   const { currentUser } = useContext(AuthContext);
   console.log("curent user:", currentUser);
   const [value, onChange] = useState(new Date());
+  const selectedDay = (val) => {
+    onChange(val);
+  };
+
   console.log(value);
   return (
-    <>
-      <h1>Home</h1>
-      <Calendar onChange={onChange} value={value} />
-      <button onClick={() => app.signOut()}>Sign out</button>
-      <AddTodo />
+    <div className="home_page">
+      <h4 className="title">Clever To-DO-List</h4>
+      <div className="sign-out">
+        {`Hey! ${currentUser.displayName}`}
+        <button className="" onClick={() => app.signOut()}>
+          Sign out
+        </button>
+      </div>
+      <DatePicker
+        getSelectedDay={selectedDay}
+        labelFormat={"MMMM"}
+        color={"#ff6600"}
+        endDate={90}
+      />
+      <p className="task completedTask"></p>
+      <p className="task unCompletedTask"></p>
+
       <TodoList selectedDate={value} />
-    </>
+      <AddTodo />
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import firebase, { firestore, functions, app } from "../../base";
 import { AuthContext } from "../Auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import TodoItem from "./TodoItem";
+import TodoShow from "./TodoShow";
 import { checkDate } from "../utils/checkDate";
 import PropTypes from "prop-types";
 
@@ -22,18 +22,17 @@ const TodoList = ({ selectedDate }) => {
 
   const SelectedListTodos = selectedList?.map((todo) => {
     return (
-      <div key={todo.id}>
+      <div key={todo.id} className="">
         {" "}
-        <TodoItem todo={todo} />{" "}
+        <TodoShow todo={todo} />{" "}
       </div>
     );
   });
 
   return (
-    <div>
-      {console.log(todos)}
-      {/* {console.log(todos[0].createdAt.toDate())} */}
-      {list && SelectedListTodos}
+    <div className="todolistpage">
+      <h4>{(selectedList && selectedList.length) || 0} Tasks Today</h4>
+      <div className="infinite-scroll">{list && SelectedListTodos}</div>
     </div>
   );
 };
