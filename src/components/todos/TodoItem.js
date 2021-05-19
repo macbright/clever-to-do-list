@@ -50,7 +50,7 @@ const TodoItem = (props) => {
     console.log("checking date format", todo);
     todosRef
       .doc(id2.id)
-      .set({ text: todo.text, date: todo.date }, { merge: true });
+      .set({ text: todo.text, date: todoDate }, { merge: true });
 
     // todosRef.doc(id2.id).set({ date: todo.date }, { merge: true });
     setModal(!modal);
@@ -93,16 +93,18 @@ const TodoItem = (props) => {
             </a>
           </div>
         </div>
-        <Modal
-          displayModal={modal}
-          closeModal={handleEdit}
-          content={todo.text}
-          handleClick={onEditTodo}
-          setDate={(startDate) => setTodoDate(startDate)}
-          upDate={(textNew) => setTodo({ text: textNew })}
-          date={todo}
-          buttonType={"Update"}
-        />
+        {todo.text && (
+          <Modal
+            displayModal={modal}
+            closeModal={handleEdit}
+            content={todo.text}
+            handleClick={onEditTodo}
+            setDate={(startDate) => setTodoDate(startDate)}
+            upDate={(textNew) => setTodo({ text: textNew })}
+            date={todo.date.toDate()}
+            buttonType={"Update"}
+          />
+        )}
       </div>
     )
   );
