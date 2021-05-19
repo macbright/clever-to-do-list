@@ -5,16 +5,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const Modal = (props) => {
   const [textNew, setTextNew] = useState(props.content);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(props.date);
   const divStyle = {
     display: props.displayModal ? "block" : "none",
   };
 
-  //   useEffect(() => {
-  //     const newDate = props.date.date.toDate();
-  //     setStartDate(newDate);
-  //     console.log("date type", startDate);
-  //   }, []);
+  useEffect(() => {
+    console.log("date type", startDate);
+  }, []);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -29,11 +27,6 @@ const Modal = (props) => {
     props.setDate(date);
     console.log("date: ", date);
     console.log("date1: ", startDate);
-  };
-
-  const convertDate = () => {
-    console.log("date type", props.date.date);
-    return props.date.date.toDate();
   };
 
   function closeModal(e) {
