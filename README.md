@@ -20,7 +20,7 @@ User can be able to create, edit and delete todo created by him/her
 - FIREBASE
 
 ## Demo
-The demo page can be found [HERE](https://serene-golick-bd6385.netlify.app/)
+The demo page can be found [HERE](https://clever-to-do-list.netlify.app/)
 
 ## Usage
 
