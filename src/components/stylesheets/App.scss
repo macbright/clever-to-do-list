@@ -1,12 +1,16 @@
-
 @import "./variables";
 @import "./Login";
 @import "./SignUp";
+@import "./Modal";
+@import "./home";
+@import "./addTodo";
+@import "./todoItem";
+@import "./todoList";
 
-
-body{
+body {
   background-color: $body_background;
 }
-.main{
+
+.main {
   padding: 20px;
 }
