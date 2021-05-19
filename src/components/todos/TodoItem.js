@@ -38,11 +38,6 @@ const TodoItem = (props) => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   setTodoDate(todo.date);
-  //   console.log("checking proper date data:", todo);
-  // }, [todo]);
-
   const onCompleteTodo = (id, complete) =>
     todosRef.doc(id).set({ complete: !complete }, { merge: true });
 
@@ -68,7 +63,7 @@ const TodoItem = (props) => {
   return (
     todo && (
       <div className="todo_page">
-        {console.log("checked: ", todo.text, todo.date)}
+        {console.log("todo object ", todo)}
         <h4>
           {" "}
           <Link to="/">
@@ -100,7 +95,7 @@ const TodoItem = (props) => {
             content={todo.text}
             handleClick={onEditTodo}
             setDate={(startDate) => setTodoDate(startDate)}
-            upDate={(textNew) => setTodo({ text: textNew })}
+            upDate={(textNew) => setTodo({ ...todo, text: textNew })}
             date={todo.date.toDate()}
             buttonType={"Update"}
           />
