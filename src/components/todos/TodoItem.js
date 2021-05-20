@@ -41,13 +41,13 @@ const TodoItem = (props) => {
   const onCompleteTodo = (id, complete) =>
     todosRef.doc(id).set({ complete: !complete }, { merge: true });
 
-  const onEditTodo = () => {
-    console.log("checking date format", todo);
+  const update = (todo) => {
+    setTodo(todo);
+    console.log("updated todo from update 4", todo);
     todosRef
       .doc(id2.id)
-      .set({ text: todo.text, date: todoDate }, { merge: true });
+      .set({ text: todo.text, date: todo.date }, { merge: true });
 
-    // todosRef.doc(id2.id).set({ date: todo.date }, { merge: true });
     setModal(!modal);
   };
 
@@ -59,11 +59,9 @@ const TodoItem = (props) => {
     todosRef.doc(id).delete();
     history.push("/");
   };
-
   return (
     todo && (
       <div className="todo_page">
-        {console.log("todo object ", todo)}
         <h4>
           {" "}
           <Link to="/">
@@ -92,11 +90,8 @@ const TodoItem = (props) => {
           <Modal
             displayModal={modal}
             closeModal={handleEdit}
-            content={todo.text}
-            handleClick={onEditTodo}
-            setDate={(startDate) => setTodoDate(startDate)}
-            upDate={(textNew) => setTodo({ ...todo, text: textNew })}
-            date={todo.date.toDate()}
+            todo={todo}
+            upDatedTodo={update}
             buttonType={"Update"}
           />
         )}

@@ -3,15 +3,16 @@ import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const Modal = (props) => {
-  const [todo, setTodo] = useState(props.todo);
+const AddTodoModal = (props) => {
+  const [todo, setTodo] = useState({});
   const [startDate, setStartDate] = useState();
-  //   const [todoDate, setTodoDate] = useState(props.todo.date.toDate());
   const divStyle = {
     display: props.displayModal ? "block" : "none",
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("date type", startDate);
+  }, []);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -21,22 +22,21 @@ const Modal = (props) => {
 
   const handleDate = (date, e) => {
     e.preventDefault();
-    setTodo({ ...todo, date: date });
-    console.log("todosss", date);
     setStartDate(date);
+    setTodo({ ...todo, date: date });
   };
 
-  const handleUpdate = () => {
-    props.upDatedTodo(todo);
+  const upDateToddo = () => {
+    props.handleClick(todo);
   };
 
   function closeModal(e) {
     e.stopPropagation();
     props.closeModal();
   }
-
   return (
     <div className="modal" onClick={closeModal} style={divStyle}>
+      {console.log("checked: from modal ", startDate)}{" "}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         {" "}
         <span className="close" onClick={closeModal}>
@@ -48,11 +48,11 @@ const Modal = (props) => {
           placeholder="write your todo"
           rows="6"
           required
-          value={todo.text}
+          value={props.content}
           onChange={handleChange}
         ></textarea>{" "}
         <DatePicker selected={startDate} onChange={handleDate} />
-        <button className="save" onClick={handleUpdate}>
+        <button className="save" onClick={upDateToddo}>
           {" "}
           {props.buttonType}
         </button>
@@ -61,13 +61,15 @@ const Modal = (props) => {
   );
 };
 
-Modal.propTypes = {
+AddTodoModal.propTypes = {
   displayModal: PropTypes.bool,
   closeModal: PropTypes.func,
   handleClick: PropTypes.func,
-  todo: PropTypes.object,
+  content: PropTypes.string,
   buttonType: PropTypes.string,
-  upDatedTodo: PropTypes.func,
+  upDate: PropTypes.func,
+  setDate: PropTypes.func,
+  date: PropTypes.object,
   error: PropTypes.string,
 };
-export default Modal;
+export default AddTodoModal;

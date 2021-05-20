@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import firebase, { firestore, functions, app } from "../../base";
 import { AuthContext } from "../Auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import Modal from "./Modal";
+import AddTodoModal from "./AddTodoModal";
 
 const AddTodo = () => {
   //   const addTodo = functions.httpsCallable("addTodo");
@@ -12,15 +12,15 @@ const AddTodo = () => {
   const [modal, setModal] = useState(false);
   const [todoDate, setTodoDate] = useState(new Date());
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (todo === null || todo === "") {
+  const handleSubmit = (todo) => {
+    setTodo(todo);
+    if (todo === null || todo.text === "") {
       setError("todo can't not be blank");
     } else {
       todosRef.add({
-        text: todo,
+        text: todo.text,
         complete: false,
-        date: todoDate,
+        date: todo.date,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
       setTodo("");
@@ -46,7 +46,15 @@ const AddTodo = () => {
         {" "}
         + AddTodo
       </button>
-      <Modal
+
+      <AddTodoModal
+        displayModal={modal}
+        closeModal={handleEdit}
+        handleClick={handleSubmit}
+        buttonType={"Save"}
+        error={error}
+      />
+      {/* <AddTodoModal
         displayModal={modal}
         closeModal={handleEdit}
         content={todo}
@@ -56,7 +64,7 @@ const AddTodo = () => {
         date={todoDate}
         buttonType={"Save"}
         error={error}
-      />
+      /> */}
     </div>
   );
 };
